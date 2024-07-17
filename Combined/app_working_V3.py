@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import cvxpy as cp
 from scipy.optimize import minimize
 from scipy.optimize import linprog
+import os
 
 # Define forward recursion functions
 def load_data(nifty50_data, debt_long_data, debt_short_data):
@@ -627,13 +628,20 @@ if uploaded_file:
         st.header("Forward Recursion Results")
         weights_df, wealth_history_df, monthly_investment_df, monthly_investment_change_df, downloadable_files_FR = process_clients(client_data, combined_returns)
         for file in downloadable_files_FR:
-            with open(file, 'rb') as f:
-                st.download_button(
-                    label=f"Download results for {file}",
-                    data=f,
-                    file_name=file,
-                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                )
+            st.write(f"Processing file: {file}")  # Debug statement
+            if not os.path.exists(file):
+                st.error(f"File not found: {file}")
+                continue
+            try:
+                with open(file, 'rb') as f:
+                    st.download_button(
+                        label=f"Download results for {file}",
+                        data=f,
+                        file_name=file,
+                        mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    )
+            except Exception as e:
+                st.error(f"Error opening file {file}: {e}")
 
     elif recursion_type == "Backward Recursion":
         st.header("Backward Recursion Results")
