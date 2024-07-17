@@ -79,8 +79,8 @@ def forward_recursion_goal_programming(financial_goal, time_horizon_years, risk_
         current_data = data.loc[:str(end_date)]
 
         best_weights, best_return, best_risk, mean_returns = get_best_return_and_risk_fr(risk_tolerance, current_data)
-        st.markdown(best_risk)
-        st.markdown(best_return)
+        #st.markdown(best_risk)
+        #st.markdown(best_return)
         best_return_history.append(best_return)
         best_risk_history.append(best_risk)
         weight_history.append(best_weights)
@@ -213,42 +213,56 @@ def process_clients(client_data, combined_returns):
                 monthly_investment_change_df = pd.DataFrame(goal_result['Monthly Investment change'], columns=["Monthly Investment change"])
                 monthly_investment_change_df.to_excel(writer, sheet_name=f'Goal_{goal_num}_Mnthly_inv_chnge', index=False)
 
-                # Plotting the results
-                st.write(f'**Client: {client_id} and Goal Amount: {round(financial_goal)}**')
-                plt.figure(figsize=(14, 30))
+                st.markdown(f"<h2 style='text-align: center; color: blue;'>Client: {client_id} and Goal: {goal_num} </h2>", unsafe_allow_html=True)
+                st.markdown(f"<h4>Portfolio Return : {round(max(best_return_history), 4)}</h4>", unsafe_allow_html=True)
+                #st.markdown(round(max(best_return_history), 4))
+                st.markdown(f"<h4>Portfolio Risk : {round(max(best_risk_history), 4)} </h4>", unsafe_allow_html=True)
+                #st.markdown(round(max(best_risk_history), 4))
+                st.markdown(f"<h4>Suggested Minimum Monthly Investment : {round(goal_result['Min Monthly Investment'], 2)}</h4>", unsafe_allow_html=True)
+                #st.markdown(round(goal_result['Min Monthly Investment'], 2))
 
-                plt.subplot(3, 1, 1)
+                # Plotting the results
+                #st.subheader(f'**Client: {client_id} and Goal: {goal_num}**')
+                plt.figure(figsize=(14, 30))
+                
+                st.markdown("<h3 style='text-align: center; color: red;'>Wealth Level over Time</h4>", unsafe_allow_html=True)
+                plt.figure(figsize=(10, 6))
                 plt.plot(range(1, goal_result['Years'] + 1), goal_result['Wealth History'], marker='o')
-                plt.title('Wealth Level Over Time')
+                #plt.title('Wealth Level Over Time')
                 plt.xlabel('Years')
                 plt.ylabel('Wealth')
                 plt.grid(True)
-                #plt.close()
-
-                plt.subplot(3, 1, 2)
+                st.pyplot()
+                plt.close()
+                
+                st.markdown("<h3 style='text-align: center; color: red;'>Best Return and Risk over Time</h4>", unsafe_allow_html=True)
+                plt.figure(figsize=(10, 6))
                 plt.plot(range(1, goal_result['Years'] + 1), goal_result['Best Return History'], marker='o', label='Return')
                 plt.plot(range(1, goal_result['Years'] + 1), goal_result['Best Risk History'], marker='x', label='Risk')
-                plt.title('Best Return and Risk Over Time')
+                #plt.title('Best Return and Risk Over Time')
                 plt.xlabel('Years')
                 plt.ylabel('Return/Risk')
                 plt.xlim([0,10])
                 plt.ylim([0,1])
                 plt.legend()
                 plt.grid(True)
-                #plt.close()
+                st.pyplot()
+                plt.close()
 
-                plt.subplot(3, 1, 3)
+                st.markdown("<h3 style='text-align: center; color: red;'>Portfolio weights over time</h4>", unsafe_allow_html=True)
+                plt.figure(figsize=(10, 6))
                 weights = np.array(goal_result['Weight History'])
                 for i in range(weights.shape[1]):
                     plt.plot(range(1, goal_result['Years'] + 1), weights[:, i], marker='o', label=f'Asset {i + 1}')
-                plt.title('Portfolio Weights Over Time')
+                #plt.title('Portfolio Weights Over Time')
                 plt.xlabel('Years')
                 plt.ylabel('Weights')
                 plt.xlim([0,10])
                 plt.ylim([0,1])
                 plt.legend()
                 plt.grid(True)
-                #plt.close()
+                st.pyplot()
+                plt.close()
 
                 # plt.subplot(5, 1, 4)
                 # plt.plot(range(1, goal_result['Years'] + 1), goal_result['Monthly Investment change'], marker='o')
@@ -265,9 +279,9 @@ def process_clients(client_data, combined_returns):
                 # plt.xlabel('Years')
                 # plt.ylabel('Monthly Investment')
                 # plt.grid(True)
-                plt.savefig(f"./model_output/Forward_R/Client_{client_id}_Goal_{goal_num}_plot.png")
-                st.pyplot()
-                plt.close()
+                #plt.savefig(f"./model_output/Forward_R/Client_{client_id}_Goal_{goal_num}_plot.png")
+                #st.pyplot()
+                #plt.close()
 
                 workbook = writer.book
                 worksheet = workbook.add_worksheet(f"Goal_{goal_num}_Graph")
@@ -358,7 +372,6 @@ def get_best_return_and_risk(risk_tolerance, data):
     best_weights, best_return, best_risk = get_best_portfolio(risk_tolerance)
 
     return best_return, best_risk, best_weights
-
 def calculate_cashflows(target_wealth, time_horizon, mu, sigma, dt):
     cashflows = np.zeros(time_horizon)
     required_wealth = target_wealth
@@ -491,24 +504,25 @@ def process_clients_backward(user_data, combined_returns):
                 for t in range(len(time_intervals)):
                     for j, threshold in enumerate(probability_thresholds):
                         cumulative_probabilities[t, j] = np.mean(wealth_trajectories[:, t] <= threshold)
-                st.write(f'**Client: {client_name} and Goal Amount: {round(goal_amount)}**')
-                plt.figure(figsize=(10, 6))
-                for t in range(len(time_intervals)):
-                    plt.plot(probability_thresholds, 1 - cumulative_probabilities[t, :], label=f'Time {t}')
-                plt.xlabel('Wealth')
-                plt.ylabel('1 - Cumulative Probability')
-                plt.title('Probability Distribution of Wealth Over Time')
-                plt.legend()
-                plt.grid(True)
+                #st.subheader(f'**Client: {client_name} and Goal: {goal_index +1}**')
+                st.markdown(f"<h2 style='text-align: center; color: blue;'>Client: {client_name} and Goal: {goal_index + 1} </h2>", unsafe_allow_html=True)
+                # plt.figure(figsize=(10, 6))
+                # for t in range(len(time_intervals)):
+                #     plt.plot(probability_thresholds, 1 - cumulative_probabilities[t, :], label=f'Time {t}')
+                # plt.xlabel('Wealth')
+                # plt.ylabel('1 - Cumulative Probability')
+                # plt.title('Probability Distribution of Wealth Over Time')
+                # plt.legend()
+                # plt.grid(True)
 
-                plot_file = f"./model_output/Backward_R/plot_{client_name}_goal_{goal_index + 1}.png"
-                plt.savefig(plot_file)
-                st.pyplot()
-                plt.close()
+                # plot_file = f"./model_output/Backward_R/plot_{client_name}_goal_{goal_index + 1}.png"
+                # plt.savefig(plot_file)
+                # st.pyplot()
+                # plt.close()
 
-                workbook = writer.book
-                worksheet = writer.sheets[f"Optimal Policy {goal_index + 1}"]
-                worksheet.insert_image('K1', plot_file)
+                # workbook = writer.book
+                # worksheet = writer.sheets[f"Optimal Policy {goal_index + 1}"]
+                # worksheet.insert_image('K1', plot_file)
 
                 wealth_trajectories_df = pd.DataFrame(wealth_trajectories, columns=[f'Year {int(t)}' for t in time_intervals])
                 wealth_trajectories_df.to_excel(writer, sheet_name=f"Wealth Trajectories {goal_index + 1}")
@@ -516,9 +530,14 @@ def process_clients_backward(user_data, combined_returns):
                 terminal_wealth = wealth_trajectories[:, -1]
                 terminal_wealth_df = pd.DataFrame(terminal_wealth, columns=['Terminal Wealth'])
                 terminal_wealth_summary = terminal_wealth_df.describe()
-                st.markdown(mu)
-                st.markdown(sigma)
-                st.dataframe(terminal_wealth_summary)
+                st.markdown(f"<h4>Portfolio Return: {round(mu,4)}</h4>", unsafe_allow_html=True)
+                #st.markdown(round(mu,4))
+                st.markdown(f"<h4>Portfolio Risk: {round(sigma,4)}</h4>",unsafe_allow_html=True)
+                #st.markdown(round(sigma,4))
+                st.markdown(f"<h4>Suggested Minimum Monthly Investment : {round((sum((cashflows)/len(cashflows))/12), 2)} </h4>", unsafe_allow_html=True)
+                #st.markdown(round((sum((cashflows)/len(cashflows))/12), 2))
+                # st.markdown("<h4>Statistical Summery</h4>", unsafe_allow_html=True)
+                # st.dataframe(terminal_wealth_summary)
                 terminal_wealth_df.to_excel(writer, sheet_name=f"Terminal Wealth {goal_index + 1}")
                 terminal_wealth_summary.to_excel(writer, sheet_name=f"Terminal Wealth Summary {goal_index + 1}")
 
@@ -537,14 +556,45 @@ def process_clients_backward(user_data, combined_returns):
                 terminal_wealth = wealth_trajectories[:, -1]
 
                 goal_achievement_probability = np.mean(terminal_wealth >= target_wealth)  # Ensure target_wealth is a scalar
+                st.markdown(f"<h4>Goal Achievement Probability : {goal_achievement_probability}</h4>", unsafe_allow_html=True)
+                #st.markdown(goal_achievement_probability)
+                
                 standard_deviation_terminal_wealth = np.std(terminal_wealth)
+                st.markdown(f"<h4>Standard Deviation Terminal Wealth : {round(standard_deviation_terminal_wealth, 2)}</h4>", unsafe_allow_html=True)
+                #st.markdown(round(standard_deviation_terminal_wealth, 2))
+                
                 value_at_risk_95 = np.percentile(terminal_wealth, 5)
+                st.markdown(f"<h4>Value at Risk at 95% : {round(value_at_risk_95, 2)}</h4>", unsafe_allow_html=True)
+                #st.markdown(round(value_at_risk_95, 2))
+                
                 conditional_value_at_risk_95 = np.mean(terminal_wealth[terminal_wealth <= value_at_risk_95])
+                st.markdown(f"<h4>Conditional value at risk at 95% : {round(conditional_value_at_risk_95, 2)}</h4>", unsafe_allow_html=True)
+                #st.markdown(round(conditional_value_at_risk_95, 2)) 
+                
+                st.markdown("<h4>Statistical Summery</h4>", unsafe_allow_html=True)
+                st.dataframe(terminal_wealth_summary)
 
                 # print(f"Goal Achievement Probability: {goal_achievement_probability * 100:.2f}%")
                 # print(f"Standard Deviation of Terminal Wealth: {standard_deviation_terminal_wealth:.2f}")
                 # print(f"Value at Risk (95%): {value_at_risk_95:.2f}")
                 # print(f"Conditional Value at Risk (95%): {conditional_value_at_risk_95:.2f}")
+                st.markdown("<h3 style='text-align: center; color: red;'>Probability Distribution of Wealth Over Time</h4>", unsafe_allow_html=True)
+                plt.figure(figsize=(10, 6))
+                for t in range(len(time_intervals)):
+                    plt.plot(probability_thresholds, 1 - cumulative_probabilities[t, :], label=f'Time {t}')
+                plt.xlabel('Wealth')
+                plt.ylabel('1 - Cumulative Probability')
+                #plt.title('Probability Distribution of Wealth Over Time')
+                plt.legend()
+                plt.grid(True)
+
+                plot_file = f"./model_output/Backward_R/plot_{client_name}_goal_{goal_index + 1}.png"
+                plt.savefig(plot_file)
+                st.pyplot()
+                plt.close()
+                workbook = writer.book
+                worksheet = writer.sheets[f"Optimal Policy {goal_index + 1}"]
+                worksheet.insert_image('K1', plot_file)
 
                 metrics_df = pd.DataFrame({
                     'Metric': ['Goal Achievement Probability', 'Goal Amount', 'Standard Deviation of Terminal Wealth', 'Value at Risk (95%)', 'Conditional Value at Risk (95%)'],
@@ -584,7 +634,7 @@ if uploaded_file:
         for file in downloadable_files_BR:
             with open(file, 'rb') as f:
                 st.download_button(
-                    label=f"Download results for {file}",
+                    label=f"Download Result",
                     data=f,
                     file_name=file,
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
