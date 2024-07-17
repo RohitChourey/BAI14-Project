@@ -9,10 +9,10 @@ from scipy.optimize import minimize
 from scipy.optimize import linprog
 
 # Define forward recursion functions
-def load_data():
-    nifty50_data = pd.read_csv('./historic_data/Nifty 50 Historical Data.csv')
-    debt_long_data = pd.read_csv('./historic_data/India 10-Year Bond Yield Historical Data.csv')
-    debt_short_data = pd.read_csv('./historic_data/India 3-Month Bond Yield Historical Data.csv')
+def load_data(nifty50_data, debt_long_data, debt_short_data):
+    #nifty50_data = pd.read_csv('./historic_data/Nifty 50 Historical Data.csv')
+    #debt_long_data = pd.read_csv('./historic_data/India 10-Year Bond Yield Historical Data.csv')
+    #debt_short_data = pd.read_csv('./historic_data/India 3-Month Bond Yield Historical Data.csv')
     nifty50_data['Date'] = pd.to_datetime(nifty50_data['Date'], format='%d-%m-%Y')
     debt_long_data['Date'] = pd.to_datetime(debt_long_data['Date'], format='%d-%m-%Y')
     debt_short_data['Date'] = pd.to_datetime(debt_short_data['Date'], format='%d-%m-%Y')
@@ -611,11 +611,17 @@ st.title("Investment Goal Planning")
 st.sidebar.title("Choose Recursion Type")
 recursion_type = st.sidebar.selectbox("Select Recursion Type", ["Forward Recursion", "Backward Recursion", "Both"])
 uploaded_file = st.file_uploader("Upload your Excel file with client data", type=["xlsx"])
+nifty50_data = st.file_uploader("Upload your CSV file with nifty50_data", type=["xlsx"])
+debt_long_data = st.file_uploader("Upload your CSV file with debt_long_data_df", type=["xlsx"])
+debt_short_data = st.file_uploader("Upload your CSV file with debt_short_data_df", type=["xlsx"])
 
 if uploaded_file:
     st.set_option('deprecation.showPyplotGlobalUse', False)
     client_data = pd.read_excel(uploaded_file)
-    combined_returns = load_data()
+    nifty50_data_df = pd.read_csv(nifty50_data)
+    debt_long_data_df = pd.read_csv(debt_long_data)
+    debt_short_data_df = pd.read_csv(debt_short_data)
+    combined_returns = load_data(nifty50_data_df, debt_long_data_df, debt_short_data_df)
     if recursion_type == "Forward Recursion":
         st.header("Forward Recursion Results")
         weights_df, wealth_history_df, monthly_investment_df, monthly_investment_change_df, downloadable_files_FR = process_clients(client_data, combined_returns)
