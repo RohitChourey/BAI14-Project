@@ -159,7 +159,7 @@ def get_best_return_and_risk_fr(risk_tolerance, data):
     return combined_allocation, combined_return, combined_risk, mean_returns
 
 def process_clients(client_data, combined_returns):
-    downloadable_files_FR = []
+    #downloadable_files_FR = []
     for index, row in client_data.iterrows():
         client_id = row['Client']
         initial_wealth = row['Lumpsum Investment Amount']
@@ -399,7 +399,7 @@ def process_clients_backward(user_data, combined_returns):
     # Iterate through each user in the data to process their financial goals.
     
     for index, user in user_data.iterrows():
-        downloadable_files_BR = []
+        #downloadable_files_BR = []
         client_name = user['Client']
         risk_tolerance = user['Risk Tolerance']
 
