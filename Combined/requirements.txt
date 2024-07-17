@@ -1,6 +1,4 @@
 streamlit
-BytesIO
-zipfile
 pandas
 numpy
 matplotlib
