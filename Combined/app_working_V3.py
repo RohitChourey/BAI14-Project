@@ -632,7 +632,7 @@ if uploaded_file:
         st.download_button(
             label="Download Result",
             data=downloadable_files_FR,
-            file_name="FR",
+            file_name="FR.xlsx",
             mime='application/vnd.ms-excel'
         )
 
@@ -643,7 +643,7 @@ if uploaded_file:
         st.download_button(
             label="Download Result",
             data=downloadable_files_BR,
-            file_name="BR",
+            file_name="BR.xlsx",
             mime='application/vnd.ms-excel'
         )
     elif recursion_type == "Both":
