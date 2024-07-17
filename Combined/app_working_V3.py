@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import cvxpy as cp
 from scipy.optimize import minimize
 from scipy.optimize import linprog
-import os
+import io
 
 # Define forward recursion functions
 def load_data(nifty50_data, debt_long_data, debt_short_data):
@@ -194,9 +194,9 @@ def process_clients(client_data, combined_returns):
 
         # Save results to an Excel file for each client
         client_filename = f'Client_{client_id}_Investment_Plan.xlsx'
-        path_name = f'.\model_output\Forward_R\{client_filename}'
-        downloadable_files_FR.append(path_name)
-        with pd.ExcelWriter(client_filename) as writer:
+        #path_name = f'.\model_output\Forward_R\{client_filename}'
+        downloadable_files_FR = io.BytesIO()
+        with pd.ExcelWriter(client_filename, downloadable_files_FR, engine='xlsxwriter') as writer:
             for goal_num, goal_result in enumerate(all_goals_results, start=1):
                 # Save each goal's results in separate sheets
                 min_monthly_investment_df = pd.DataFrame([[goal_result['Min Monthly Investment']]], columns=['Minimum Monthly Investment'])
@@ -425,9 +425,9 @@ def process_clients_backward(user_data, combined_returns):
 
                 goals.append((goal_amount, years, priority))
         client_filename = f"{client_name}_investment_plan.xlsx"
-        path_name = f'.\model_output\Backward_R\{client_filename}'
-        downloadable_files_BR.append(path_name)
-        with pd.ExcelWriter(path_name) as writer:
+        #path_name = f'.\model_output\Backward_R\{client_filename}'
+        downloadable_files_BR = io.BytesIO()
+        with pd.ExcelWriter(client_name, downloadable_files_BR, engine='xlsxwriter') as writer:
             for goal_index, (goal_amount, years, priority) in enumerate(goals):
                 target_wealth = goal_amount
                 investment_horizon = years
@@ -627,52 +627,37 @@ if uploaded_file:
     if recursion_type == "Forward Recursion":
         st.header("Forward Recursion Results")
         weights_df, wealth_history_df, monthly_investment_df, monthly_investment_change_df, downloadable_files_FR = process_clients(client_data, combined_returns)
-        for file in downloadable_files_FR:
-            st.write(f"Processing file: {file}")  # Debug statement
-            if not os.path.exists(file):
-                st.error(f"File not found: {file}")
-                continue
-            try:
-                with open(file, 'rb') as f:
-                    st.download_button(
-                        label=f"Download results for {file}",
-                        data=f,
-                        file_name=file,
-                        mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                    )
-            except Exception as e:
-                st.error(f"Error opening file {file}: {e}")
+
+        st.download_button(
+            label="Download Result",
+            data=downloadable_files_FR,
+            mime='application/vnd.ms-excel'
+        )
 
     elif recursion_type == "Backward Recursion":
         st.header("Backward Recursion Results")
         downloadable_files_BR, terminal_wealth_summary, mu, sigma = process_clients_backward(client_data, combined_returns)
-        for file in downloadable_files_BR:
-            with open(file, 'rb') as f:
-                st.download_button(
-                    label=f"Download Result",
-                    data=f,
-                    file_name=file,
-                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                )
+
+        st.download_button(
+            label="Download Result",
+            data=downloadable_files_BR,
+            mime='application/vnd.ms-excel'
+        )
     elif recursion_type == "Both":
         st.header("Forward and Backward Recursion Results")
         st.subheader("Forward Recursion")
         weights_df, wealth_history_df, monthly_investment_df, monthly_investment_change_df, downloadable_files_FR = process_clients(client_data, combined_returns)
-        for file in downloadable_files_FR:
-            with open(file, 'rb') as f:
-                st.download_button(
-                    label=f"Download Result",
-                    data=f,
-                    file_name=file,
-                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                )
+
+        st.download_button(
+            label="Download Result",
+            data=downloadable_files_FR,
+            mime='application/vnd.ms-excel'
+        )
         st.subheader("Backward Recursion")
         downloadable_files_BR, terminal_wealth_summary, mu, sigma = process_clients_backward(client_data, combined_returns)
-        for file in downloadable_files_BR:
-            with open(file, 'rb') as f:
-                st.download_button(
-                    label=f"Download Result",
-                    data=f,
-                    file_name=file,
-                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                )
+
+        st.download_button(
+            label="Download Result",
+            data=downloadable_files_BR,
+            mime='application/vnd.ms-excel'
+        )
