@@ -291,7 +291,7 @@ def process_clients(client_data, combined_returns):
         st.download_button(
             label="Download Result",
             data=downloadable_files_FR,
-            file_name="FR.xlsx",
+            file_name=f"FR{client_id}.xlsx",
             mime='application/vnd.ms-excel'
         )    
     return weights_df, wealth_history_df, monthly_investment_df, monthly_investment_change_df, downloadable_files_FR
@@ -612,7 +612,7 @@ def process_clients_backward(user_data, combined_returns):
         st.download_button(
             label="Download Result",
             data=downloadable_files_BR,
-            file_name="BR.xlsx",
+            file_name=f"BR{client_name}.xlsx",
             mime='application/vnd.ms-excel'
         )
     monthly_investment_needed_df.to_excel('monthly_investment_needed.xlsx', index=False)
