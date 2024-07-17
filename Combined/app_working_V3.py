@@ -283,9 +283,9 @@ def process_clients(client_data, combined_returns):
                 #st.pyplot()
                 #plt.close()
 
-                workbook = writer.book
-                worksheet = workbook.add_worksheet(f"Goal_{goal_num}_Graph")
-                worksheet.insert_image('A1', f"Client_{client_id}_Goal_{goal_num}_plot_monthly_investment.png")
+                #workbook = writer.book
+                #worksheet = workbook.add_worksheet(f"Goal_{goal_num}_Graph")
+                #worksheet.insert_image('A1', f"Client_{client_id}_Goal_{goal_num}_plot_monthly_investment.png")
     
     return weights_df, wealth_history_df, monthly_investment_df, monthly_investment_change_df, downloadable_files_FR
 
@@ -588,13 +588,13 @@ def process_clients_backward(user_data, combined_returns):
                 plt.legend()
                 plt.grid(True)
 
-                plot_file = f"./model_output/Backward_R/plot_{client_name}_goal_{goal_index + 1}.png"
-                plt.savefig(plot_file)
+                #plot_file = f"./model_output/Backward_R/plot_{client_name}_goal_{goal_index + 1}.png"
+                #plt.savefig(plot_file)
                 st.pyplot()
                 plt.close()
-                workbook = writer.book
-                worksheet = writer.sheets[f"Optimal Policy {goal_index + 1}"]
-                worksheet.insert_image('K1', plot_file)
+                #workbook = writer.book
+                #worksheet = writer.sheets[f"Optimal Policy {goal_index + 1}"]
+                #worksheet.insert_image('K1', plot_file)
 
                 metrics_df = pd.DataFrame({
                     'Metric': ['Goal Achievement Probability', 'Goal Amount', 'Standard Deviation of Terminal Wealth', 'Value at Risk (95%)', 'Conditional Value at Risk (95%)'],
