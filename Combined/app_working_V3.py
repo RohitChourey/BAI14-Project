@@ -427,7 +427,7 @@ def process_clients_backward(user_data, combined_returns):
         client_filename = f"{client_name}_investment_plan.xlsx"
         #path_name = f'.\model_output\Backward_R\{client_filename}'
         downloadable_files_BR = io.BytesIO()
-        with pd.ExcelWriter(client_filename, downloadable_files_BR, engine='xlsxwriter') as writer:
+        with pd.ExcelWriter(client_name, downloadable_files_BR, engine='xlsxwriter') as writer:
             for goal_index, (goal_amount, years, priority) in enumerate(goals):
                 target_wealth = goal_amount
                 investment_horizon = years
