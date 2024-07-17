@@ -1,0 +1,8 @@
+streamlit
+io
+zipfile
+pandas
+numpy
+matplotlib
+cvxpy
+scipy
