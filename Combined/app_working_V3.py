@@ -631,6 +631,7 @@ if uploaded_file:
         st.download_button(
             label="Download Result",
             data=downloadable_files_FR,
+            file_name="FR",
             mime='application/vnd.ms-excel'
         )
 
@@ -641,6 +642,7 @@ if uploaded_file:
         st.download_button(
             label="Download Result",
             data=downloadable_files_BR,
+            file_name="BR",
             mime='application/vnd.ms-excel'
         )
     elif recursion_type == "Both":
@@ -651,6 +653,7 @@ if uploaded_file:
         st.download_button(
             label="Download Result",
             data=downloadable_files_FR,
+            file_name="FR",
             mime='application/vnd.ms-excel'
         )
         st.subheader("Backward Recursion")
@@ -659,5 +662,6 @@ if uploaded_file:
         st.download_button(
             label="Download Result",
             data=downloadable_files_BR,
+            file_name="BR",
             mime='application/vnd.ms-excel'
         )
