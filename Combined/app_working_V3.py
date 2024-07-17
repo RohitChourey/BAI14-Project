@@ -610,10 +610,11 @@ def process_clients_backward(user_data, combined_returns):
 st.title("Investment Goal Planning")
 st.sidebar.title("Choose Recursion Type")
 recursion_type = st.sidebar.selectbox("Select Recursion Type", ["Forward Recursion", "Backward Recursion", "Both"])
-uploaded_file = st.file_uploader("Upload your Excel file with client data", type=["xlsx"])
+
 nifty50_data = st.file_uploader("Upload your CSV file with nifty50_data", type=["csv"])
 debt_long_data = st.file_uploader("Upload your CSV file with debt_long_data_df", type=["csv"])
 debt_short_data = st.file_uploader("Upload your CSV file with debt_short_data_df", type=["csv"])
+uploaded_file = st.file_uploader("Upload your Excel file with client data", type=["xlsx"])
 
 if uploaded_file:
     st.set_option('deprecation.showPyplotGlobalUse', False)
