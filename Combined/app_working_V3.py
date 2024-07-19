@@ -1,3 +1,10 @@
+'''
+Modification History:
+1. Constant monthly investment for Forward recursion
+2. Deployed code on Streamlit
+3. DO NOT TOUCH
+'''
+
 import streamlit as st
 from io import BytesIO
 import zipfile
@@ -384,7 +391,7 @@ def calculate_cashflows(target_wealth, time_horizon, mu, sigma, dt):
     required_wealth = target_wealth
     for t in reversed(range(time_horizon)):
         required_wealth /= np.exp((mu - 0.5 * sigma**2) * dt)
-        cashflow = required_wealth - (required_wealth * np.exp(-sigma * np.sqrt(dt)))
+        cashflow = required_wealth - (required_wealth / np.exp(mu * dt))
         cashflows[t] = max(cashflow, 0)
     return cashflows
 
