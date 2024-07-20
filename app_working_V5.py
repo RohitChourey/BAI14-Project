@@ -716,61 +716,62 @@ def process_clients_backward(user_data, combined_returns):
 
     return monthly_investment_needed_df, terminal_wealth_summary, mu, sigma
 
-# Streamlit UI
-st.title("Investment Goal Planning")
-st.sidebar.title("Choose Recursion Type")
-recursion_type = st.sidebar.selectbox("Select Recursion Type", ["Forward Recursion", "Backward Recursion", "Both"])
+def GBWM_dynamic_Programming_V2():
+    # Streamlit UI
+    st.title("Investment Goal Planning")
+    st.sidebar.title("Choose Recursion Type")
+    recursion_type = st.sidebar.selectbox("Select Recursion Type", ["Forward Recursion", "Backward Recursion", "Both"])
 
-nifty50_data = st.file_uploader("Upload your CSV file with nifty50_data", type=["csv"])
-debt_long_data = st.file_uploader("Upload your CSV file with debt_long_data_df", type=["csv"])
-debt_short_data = st.file_uploader("Upload your CSV file with debt_short_data_df", type=["csv"])
-uploaded_file = st.file_uploader("Upload your Excel file with client data", type=["xlsx"])
+    nifty50_data = st.file_uploader("Upload your CSV file with nifty50_data", type=["csv"])
+    debt_long_data = st.file_uploader("Upload your CSV file with debt_long_data_df", type=["csv"])
+    debt_short_data = st.file_uploader("Upload your CSV file with debt_short_data_df", type=["csv"])
+    uploaded_file = st.file_uploader("Upload your Excel file with client data", type=["xlsx"])
 
-if uploaded_file:
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    client_data = pd.read_excel(uploaded_file)
-    nifty50_data_df = pd.read_csv(nifty50_data)
-    debt_long_data_df = pd.read_csv(debt_long_data)
-    debt_short_data_df = pd.read_csv(debt_short_data)
-    combined_returns = load_data(nifty50_data_df, debt_long_data_df, debt_short_data_df)
-    if recursion_type == "Forward Recursion":
-        st.header("Forward Recursion Results")
-        weights_df, wealth_history_df, monthly_investment_df, monthly_investment_change_df, downloadable_files_FR = process_clients(client_data, combined_returns)
+    if uploaded_file:
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        client_data = pd.read_excel(uploaded_file)
+        nifty50_data_df = pd.read_csv(nifty50_data)
+        debt_long_data_df = pd.read_csv(debt_long_data)
+        debt_short_data_df = pd.read_csv(debt_short_data)
+        combined_returns = load_data(nifty50_data_df, debt_long_data_df, debt_short_data_df)
+        if recursion_type == "Forward Recursion":
+            st.header("Forward Recursion Results")
+            weights_df, wealth_history_df, monthly_investment_df, monthly_investment_change_df, downloadable_files_FR = process_clients(client_data, combined_returns)
 
-        # st.download_button(
-        #     label="Download Result",
-        #     data=downloadable_files_FR,
-        #     file_name="FR.xlsx",
-        #     mime='application/vnd.ms-excel'
-        # )
+            # st.download_button(
+            #     label="Download Result",
+            #     data=downloadable_files_FR,
+            #     file_name="FR.xlsx",
+            #     mime='application/vnd.ms-excel'
+            # )
 
-    elif recursion_type == "Backward Recursion":
-        st.header("Backward Recursion Results")
-        downloadable_files_BR, terminal_wealth_summary, mu, sigma = process_clients_backward(client_data, combined_returns)
+        elif recursion_type == "Backward Recursion":
+            st.header("Backward Recursion Results")
+            downloadable_files_BR, terminal_wealth_summary, mu, sigma = process_clients_backward(client_data, combined_returns)
 
-        # st.download_button(
-        #     label="Download Result",
-        #     data=downloadable_files_BR,
-        #     file_name="BR.xlsx",
-        #     mime='application/vnd.ms-excel'
-        # )
-    elif recursion_type == "Both":
-        st.header("Forward and Backward Recursion Results")
-        st.subheader("Forward Recursion")
-        weights_df, wealth_history_df, monthly_investment_df, monthly_investment_change_df, downloadable_files_FR = process_clients(client_data, combined_returns)
+            # st.download_button(
+            #     label="Download Result",
+            #     data=downloadable_files_BR,
+            #     file_name="BR.xlsx",
+            #     mime='application/vnd.ms-excel'
+            # )
+        elif recursion_type == "Both":
+            st.header("Forward and Backward Recursion Results")
+            st.subheader("Forward Recursion")
+            weights_df, wealth_history_df, monthly_investment_df, monthly_investment_change_df, downloadable_files_FR = process_clients(client_data, combined_returns)
 
-        # st.download_button(
-        #     label="Download Result",
-        #     data=downloadable_files_FR,
-        #     file_name="FR.xlsx",
-        #     mime='application/vnd.ms-excel'
-        # )
-        st.subheader("Backward Recursion")
-        downloadable_files_BR, terminal_wealth_summary, mu, sigma = process_clients_backward(client_data, combined_returns)
+            # st.download_button(
+            #     label="Download Result",
+            #     data=downloadable_files_FR,
+            #     file_name="FR.xlsx",
+            #     mime='application/vnd.ms-excel'
+            # )
+            st.subheader("Backward Recursion")
+            downloadable_files_BR, terminal_wealth_summary, mu, sigma = process_clients_backward(client_data, combined_returns)
 
-        # st.download_button(
-        #     label="Download Result",
-        #     data=downloadable_files_BR,
-        #     file_name="BR.xlsx",
-        #     mime='application/vnd.ms-excel'
-        # )
+            # st.download_button(
+            #     label="Download Result",
+            #     data=downloadable_files_BR,
+            #     file_name="BR.xlsx",
+            #     mime='application/vnd.ms-excel'
+            # )
