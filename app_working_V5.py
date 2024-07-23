@@ -129,7 +129,7 @@ def get_best_return_and_risk_fr(risk_tolerance, data):
     mean_returns = data.mean()
     cov_matrix = data.cov()
     cov_matrix = (cov_matrix + cov_matrix.T) / 2
-    print('mean return', mean_returns)
+    #print('mean return', mean_returns)
     def optimize_portfolio(target_return, mean_returns, cov_matrix):
         N = len(mean_returns)
         w = cp.Variable(N)
@@ -707,12 +707,12 @@ def process_clients_backward(user_data, combined_returns):
                 st.pyplot()
                 plt.close()
 
-            st.download_button(
-                label="Download Optimal Investment Plan",
-                data=downloadable_files_BR.getvalue(),
-                file_name=client_filename,
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
+        st.download_button(
+            label="Download Result",
+            data=downloadable_files_BR.getvalue(),
+            file_name=f"BR{client_name}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
 
     return monthly_investment_needed_df, terminal_wealth_summary, mu, sigma
 
